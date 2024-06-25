@@ -24,22 +24,32 @@ function newGame() {
             });
         }
 
-        const play = () => {
-            let choice = prompt("Choose your mark: Circle [O] or Cross [X]");
-            while(!(/[XO]/i.test(choice))) {
-                choice = prompt("Either insert [O] or [X]");
-                
-            }
-            let position = prompt("Insert a position: [1, 2, 3, 4, 5, 6, 7, 8, 9]");
-            while (!/[1-9]/.test(position) && position.length>1) {
+        function userPosition(inform = "Insert a position: [1, 2, 3, 4, 5, 6, 7, 8, 9]") {
+            let position = prompt(inform);
+    
+            while (!/^[1-9]$/.test(position)) {
                 position = prompt("Please insert a number in the range [1-9]");
             }
-        
+            return position;
+        }
+    
+
+        const play = () => {
+            let choice = prompt("Choose your mark: Circle [O] or Cross [X]");
+
+            while(!(/^[xo]$/i.test(choice))) {
+                choice = prompt("Either insert [O] or [X]");    
+            }
+
+            let position = userPosition();
+            while(/[xo]/i.test(spaces[position-1])) {
+                position = userPosition("Box already ticked. Choose another position in [1-9]");
+            }
+
             spaces[position-1] = spaces[position-1].slice(0, 1) + `${choice}` + spaces[position-1].slice(1);
             console.log(board());
             
-            //TODO Strict input handling
-                // make cases for win/lose/draw etc
+            //TODO make cases for win/lose/draw etc
         }
 
                 return {play, isFull}}
